@@ -40,7 +40,7 @@ const getEntry = function (env) {
   const entry = [];
 
   if (env === developmentEnvironment ) { // only want hot reloading when in dev.
-    entry.push('webpack-hot-middleware/client');
+    entry.push('webpack-hot-middleware/client?reload=true');
   }
 
   entry.push('./src/index');
@@ -71,7 +71,7 @@ function getConfig(env) {
     target: env === testEnvironment ? 'node' : 'web', // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
     output: {
       path: __dirname + '/dist', // Note: Physical files are only output by the production build task `npm run build`.
-      publicPath: '',
+      publicPath: '/',
       filename: 'bundle.js'
     },
     plugins: getPlugins(env),
