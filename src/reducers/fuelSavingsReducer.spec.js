@@ -1,19 +1,16 @@
-import React from 'react';
 import { expect } from 'chai';
 import * as ActionTypes from '../constants/actionTypes';
-import reducer from './fuelSavings';
-import dateHelper from '../businessLogic/dateHelper';
-import calculator from '../businessLogic/fuelSavingsCalculator';
+import reducer from './fuelSavingsReducer';
+import dateHelper from '../utils/dateHelper';
 
-describe('Reducers::FuelSavings', function() {
-
-  const getInitialSate = () => {
+describe('Reducers::FuelSavings', () => {
+  const getInitialState = () => {
     return {
-      newMpg: "",
-      tradeMpg: "",
-      newPpg: "",
-      tradePpg: "",
-      milesDriven: "",
+      newMpg: '',
+      tradeMpg: '',
+      newPpg: '',
+      tradePpg: '',
+      milesDriven: '',
       milesDrivenTimeframe: 'week',
       displayResults: false,
       dateModified: null,
@@ -44,24 +41,25 @@ describe('Reducers::FuelSavings', function() {
       }
     };
   };
+  const dateModified = dateHelper.getFormattedDateTime();
 
-  it('should set initial state by default', function() {
+  it('should set initial state by default', () => {
     const action = { type: 'unknown' };
-    const expected = getInitialSate();
+    const expected = getInitialState();
 
     expect(reducer(undefined, action)).to.deep.equal(expected); // Notice use of deep because it's a nested object
     // expect(reducer(undefined, action)).to.equal(expected); // Fails. Not deeply equal
   });
 
-  it('should handle SAVE_FUEL_SAVINGS', function() {
-    const action = { type: ActionTypes.SAVE_FUEL_SAVINGS, settings: getAppState() };
-    const expected = Object.assign(getAppState(), {dateModified: dateHelper.getFormattedDateTime(new Date())});
+  it('should handle SAVE_FUEL_SAVINGS', () => {
+    const action = { type: ActionTypes.SAVE_FUEL_SAVINGS, dateModified, settings: getAppState() };
+    const expected = Object.assign(getAppState(), { dateModified });
 
     expect(reducer(getAppState(), action)).to.deep.equal(expected);
   });
 
-  it('should handle CALCULATE_FUEL_SAVINGS', function() {
-    const action = { type: ActionTypes.CALCULATE_FUEL_SAVINGS, settings: getAppState(), fieldName: 'newMpg', value: 30 };
+  it('should handle CALCULATE_FUEL_SAVINGS', () => {
+    const action = { type: ActionTypes.CALCULATE_FUEL_SAVINGS, dateModified, settings: getAppState(), fieldName: 'newMpg', value: 30 };
 
     const expectedMpg = 30;
     const expectedSavings = { monthly: '$43.33', annual: '$519.96', threeYear: '$1,559.88' };
